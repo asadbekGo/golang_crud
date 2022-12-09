@@ -1,6 +1,8 @@
 package config
 
 type Config struct {
+	HTTPPort string
+
 	PostgresHost     string
 	PostgresUser     string
 	PostgresDatabase string
@@ -11,6 +13,8 @@ type Config struct {
 func Load() Config {
 
 	var cfg Config
+
+	cfg.HTTPPort = ":4000"
 
 	cfg.PostgresHost = "localhost"
 	cfg.PostgresUser = "postgres"

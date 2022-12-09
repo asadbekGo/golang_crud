@@ -9,3 +9,12 @@ CREATE TABLE users (
 INSERT INTO users (first_name, last_name) VALUES
 ('Samandar', 'Foziljonov');
 
+
+UPDATE 
+    users 
+SET 
+    first_name = 'Ravshanbek', 
+    last_name = 'Olimov' 
+WHERE 
+    id = '32d98624-3aa2-4550-954f-c91798794dd7';
+

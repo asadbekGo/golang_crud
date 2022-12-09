@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	"database/sql"
+
 	_ "github.com/lib/pq"
 
-	"app/config"
+	"github.com/asadbekGo/golang_crud/config"
 )
 
 func ConnectionDB(cfg *config.Config) (*sql.DB, error) {
@@ -19,7 +20,6 @@ func ConnectionDB(cfg *config.Config) (*sql.DB, error) {
 		cfg.PostgresPassword,
 		cfg.PostgresPort,
 	)
-
 
 	db, err := sql.Open("postgres", connect)
 	if err != nil {

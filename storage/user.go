@@ -3,13 +3,13 @@ package storage
 import (
 	"database/sql"
 
-	"app/models"
+	"github.com/asadbekGo/golang_crud/models"
 )
 
 func Create(db *sql.DB, user models.User) (string, error) {
 
 	var (
-		id string
+		id    string
 		query string
 	)
 
@@ -20,8 +20,8 @@ func Create(db *sql.DB, user models.User) (string, error) {
 		RETURNING id
 	`
 	err := db.QueryRow(
-		query, 
-		user.FirstName, 
+		query,
+		user.FirstName,
 		user.LastName,
 	).Scan(&id)
 
@@ -35,7 +35,7 @@ func Create(db *sql.DB, user models.User) (string, error) {
 func GetById(db *sql.DB, id string) (models.User, error) {
 
 	var (
-		user models.User
+		user  models.User
 		query string
 	)
 
@@ -104,3 +104,49 @@ func GetList(db *sql.DB) ([]models.User, error) {
 	return users, nil
 }
 
+
+func Update(db *sql.DB, user models.User) (int64, error) {
+
+	var (
+		query string
+	)
+
+	query = `
+		UPDATE 
+			users 
+		SET 
+			first_name = $2, 
+			last_name = $3
+		WHERE 
+			id = $1
+	`
+
+	result, err := db.Exec(
+		query,
+		user.Id,
+		user.FirstName,
+		user.LastName,
+	)
+
+	if err != nil {
+		return 0, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+
+	if err != nil {
+		return 0, err
+	}
+
+	return rowsAffected, nil
+}
+
+func Delete(db *sql.DB, id string) error {
+
+	_, err := db.Exec(`DELETE FROM users WHERE id = $1`, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

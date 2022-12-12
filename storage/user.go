@@ -2,6 +2,7 @@ package storage
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/asadbekGo/golang_crud/models"
 )
@@ -104,7 +105,6 @@ func GetList(db *sql.DB) ([]models.User, error) {
 	return users, nil
 }
 
-
 func Update(db *sql.DB, user models.User) (int64, error) {
 
 	var (
@@ -112,12 +112,12 @@ func Update(db *sql.DB, user models.User) (int64, error) {
 	)
 
 	query = `
-		UPDATE 
-			users 
-		SET 
-			first_name = $2, 
+		UPDATE
+			users
+		SET
+			first_name = $2,
 			last_name = $3
-		WHERE 
+		WHERE
 			id = $1
 	`
 
@@ -134,6 +134,51 @@ func Update(db *sql.DB, user models.User) (int64, error) {
 
 	rowsAffected, err := result.RowsAffected()
 
+	if err != nil {
+		return 0, err
+	}
+
+	return rowsAffected, nil
+}
+
+func Patch(db *sql.DB, user models.UserData) (int64, error) {
+
+	var (
+		query = ""
+		set   = ""
+	)
+
+	query = `
+		UPDATE
+			users
+		SET `
+
+	for key, val := range user.Data {
+
+		switch val.(type) {
+		case int:
+			set += fmt.Sprintf("%s = %d,", key, val)
+		case string:
+			set += fmt.Sprintf("%s = '%s',", key, val)
+		case bool:
+			set += fmt.Sprintf("%s = %v,", key, val)
+		case float64:
+			set += fmt.Sprintf("%s = %v,", key, val)
+		}
+	}
+
+	query += set
+
+	query = query[:len(query)-1]
+
+	query += " WHERE id = $1"
+
+	result, err := db.Exec(query, user.Id)
+	if err != nil {
+		return 0, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return 0, err
 	}

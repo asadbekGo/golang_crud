@@ -12,6 +12,18 @@ import (
 	"github.com/asadbekGo/golang_crud/storage"
 )
 
+// CreateUser godoc
+// @ID create_user
+// @Router /user [POST]
+// @Summary Create User
+// @Description Create User
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body models.User true "CreateUserRequestBody"
+// @Success 201 {object} models.User "GetUserBody"
+// @Response 400 {object} string "Invalid Argument"
+// @Failure 500 {object} string "Server Error"
 func (h *HandlerV1) Create(c *gin.Context) {
 
 	var (
@@ -42,6 +54,18 @@ func (h *HandlerV1) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, userId)
 }
 
+// GetByIdUser godoc
+// @ID get_by_id_user
+// @Router /user/{id} [GET]
+// @Summary Get By Id User
+// @Description Get By Id User
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "id"
+// @Success 200 {object} models.User "GetUserBody"
+// @Response 400 {object} string "Invalid Argument"
+// @Failure 500 {object} string "Server Error"
 func (h *HandlerV1) GetById(c *gin.Context) {
 
 	id := c.Param("id")

@@ -4,7 +4,10 @@ import (
 	"database/sql"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
+	_ "github.com/asadbekGo/golang_crud/api/docs"
 	"github.com/asadbekGo/golang_crud/api/handler"
 )
 
@@ -19,4 +22,6 @@ func SetUpApi(r *gin.Engine, db *sql.DB) {
 	r.PATCH("/user", handlerV1.Patch)
 	r.DELETE("/user/:id", handlerV1.Delete)
 
+	url := ginSwagger.URL("swagger/doc.json") // The url pointing to API definition
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 }
